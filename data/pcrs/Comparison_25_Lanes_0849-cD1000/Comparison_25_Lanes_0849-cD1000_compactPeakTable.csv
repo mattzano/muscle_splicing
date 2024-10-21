@@ -1,0 +1,150 @@
+FileName,Well,Sample Description,Size [bp],Calibrated Conc. [ng/µl],Assigned Conc. [ng/µl],Peak Molarity [nmol/l],% Integrated Area,Peak Comment,Observations
+Comparison_25_Lanes_0849.cD1000,A1,Electronic Ladder,25,5.22,,321,,,Lower Marker
+Comparison_25_Lanes_0849.cD1000,A1,Electronic Ladder,50,2.25,,69.3,11.11,,
+Comparison_25_Lanes_0849.cD1000,A1,Electronic Ladder,100,2.37,,36.5,11.71,,
+Comparison_25_Lanes_0849.cD1000,A1,Electronic Ladder,200,2.47,,19.0,12.20,,
+Comparison_25_Lanes_0849.cD1000,A1,Electronic Ladder,300,2.55,,13.1,12.56,,
+Comparison_25_Lanes_0849.cD1000,A1,Electronic Ladder,400,2.57,,9.87,12.66,,
+Comparison_25_Lanes_0849.cD1000,A1,Electronic Ladder,500,2.71,,8.33,13.36,,
+Comparison_25_Lanes_0849.cD1000,A1,Electronic Ladder,700,2.46,,5.41,12.15,,
+Comparison_25_Lanes_0849.cD1000,A1,Electronic Ladder,1000,2.89,,4.44,14.25,,
+Comparison_25_Lanes_0849.cD1000,A1,Electronic Ladder,1500,6.50,6.50,6.67,,,Upper Marker
+Comparison_25_Lanes_0849.cD1000,B1,,25,6.78,,417,,,Lower Marker
+Comparison_25_Lanes_0849.cD1000,B1,,98,1.42,,22.2,82.83,,
+Comparison_25_Lanes_0849.cD1000,B1,,135,0.176,,2.01,10.30,,
+Comparison_25_Lanes_0849.cD1000,B1,,178,0.0326,,0.282,1.91,,
+Comparison_25_Lanes_0849.cD1000,B1,,285,0.0208,,0.112,1.21,,
+Comparison_25_Lanes_0849.cD1000,B1,,874,0.0642,,0.113,3.76,,
+Comparison_25_Lanes_0849.cD1000,B1,,1500,6.50,6.50,6.67,,,Upper Marker
+Comparison_25_Lanes_0849.cD1000,C1,,25,7.27,,447,,,Lower Marker
+Comparison_25_Lanes_0849.cD1000,C1,,98,1.37,,21.6,57.01,,
+Comparison_25_Lanes_0849.cD1000,C1,,240,0.924,,5.93,38.34,,
+Comparison_25_Lanes_0849.cD1000,C1,,433,0.0577,,0.205,2.39,,
+Comparison_25_Lanes_0849.cD1000,C1,,488,0.0281,,0.0886,1.17,,
+Comparison_25_Lanes_0849.cD1000,C1,,604,0.0263,,0.0670,1.09,,
+Comparison_25_Lanes_0849.cD1000,C1,,1500,6.50,6.50,6.67,,,Upper Marker
+Comparison_25_Lanes_0849.cD1000,D1,,0,0.0278,,NaN,18.72,,Peak outside of Sizing Range
+Comparison_25_Lanes_0849.cD1000,D1,,25,6.54,,403,,,Lower Marker
+Comparison_25_Lanes_0849.cD1000,D1,,180,0.0116,,0.0993,7.83,,
+Comparison_25_Lanes_0849.cD1000,D1,,192,0.109,,0.873,73.45,,
+Comparison_25_Lanes_0849.cD1000,D1,,1500,6.50,6.50,6.67,,,Upper Marker
+Comparison_25_Lanes_0849.cD1000,E1,,0,0.0540,,NaN,17.37,,Peak outside of Sizing Range
+Comparison_25_Lanes_0849.cD1000,E1,,25,6.05,,372,,,edited Lower Marker
+Comparison_25_Lanes_0849.cD1000,E1,,99,0.257,,3.98,82.63,,
+Comparison_25_Lanes_0849.cD1000,E1,,1500,6.50,6.50,6.67,,,Upper Marker
+Comparison_25_Lanes_0849.cD1000,F1,,0,0.0387,,NaN,49.96,,Peak outside of Sizing Range
+Comparison_25_Lanes_0849.cD1000,F1,,25,6.67,,410,,,Lower Marker
+Comparison_25_Lanes_0849.cD1000,F1,,103,0.0388,,0.580,50.04,,
+Comparison_25_Lanes_0849.cD1000,F1,,1500,6.50,6.50,6.67,,,Upper Marker
+Comparison_25_Lanes_0849.cD1000,G1,,25,16.2,,997,,,edited Lower Marker
+Comparison_25_Lanes_0849.cD1000,G1,,93,1.78,,29.4,83.87,,
+Comparison_25_Lanes_0849.cD1000,G1,,135,0.156,,1.77,7.34,,
+Comparison_25_Lanes_0849.cD1000,G1,,265,0.187,,1.09,8.79,,
+Comparison_25_Lanes_0849.cD1000,G1,,1500,6.50,6.50,6.67,,,edited Upper Marker
+Comparison_25_Lanes_0849.cD1000,H1,,25,6.77,,417,,,Lower Marker
+Comparison_25_Lanes_0849.cD1000,H1,,100,0.0618,,0.948,66.54,,
+Comparison_25_Lanes_0849.cD1000,H1,,272,0.0311,,0.176,33.46,,
+Comparison_25_Lanes_0849.cD1000,H1,,1500,6.50,6.50,6.67,,,Upper Marker
+Comparison_25_Lanes_0849.cD1000,A2,,25,7.63,,470,,,Lower Marker
+Comparison_25_Lanes_0849.cD1000,A2,,99,0.530,,8.25,91.85,,
+Comparison_25_Lanes_0849.cD1000,A2,,251,0.0470,,0.288,8.15,,
+Comparison_25_Lanes_0849.cD1000,A2,,1500,6.50,6.50,6.67,,,Upper Marker
+Comparison_25_Lanes_0849.cD1000,B2,,25,7.30,,449,,,Lower Marker
+Comparison_25_Lanes_0849.cD1000,B2,,100,0.263,,4.04,100.00,,
+Comparison_25_Lanes_0849.cD1000,B2,,1500,6.50,6.50,6.67,,,Upper Marker
+Comparison_25_Lanes_0849.cD1000,C2,,0,0.0356,,NaN,3.74,,Peak outside of Sizing Range
+Comparison_25_Lanes_0849.cD1000,C2,,25,6.71,,413,,,Lower Marker
+Comparison_25_Lanes_0849.cD1000,C2,,100,0.679,,10.5,71.47,,
+Comparison_25_Lanes_0849.cD1000,C2,,255,0.0667,,0.402,7.02,,
+Comparison_25_Lanes_0849.cD1000,C2,,291,0.0545,,0.288,5.74,,
+Comparison_25_Lanes_0849.cD1000,C2,,671,0.0227,,0.0520,2.39,,
+Comparison_25_Lanes_0849.cD1000,C2,,946,0.0916,,0.149,9.64,,
+Comparison_25_Lanes_0849.cD1000,C2,,1500,6.50,6.50,6.67,,,Upper Marker
+Comparison_25_Lanes_0849.cD1000,D2,,25,6.67,,410,,,Lower Marker
+Comparison_25_Lanes_0849.cD1000,D2,,100,0.403,,6.22,63.26,,
+Comparison_25_Lanes_0849.cD1000,D2,,279,0.139,,0.768,21.84,,
+Comparison_25_Lanes_0849.cD1000,D2,,529,0.0374,,0.109,5.87,,
+Comparison_25_Lanes_0849.cD1000,D2,,906,0.0576,,0.0978,9.03,,
+Comparison_25_Lanes_0849.cD1000,D2,,1500,6.50,6.50,6.67,,,Upper Marker
+Comparison_25_Lanes_0849.cD1000,E2,,0,0.0379,,NaN,5.91,,Peak outside of Sizing Range
+Comparison_25_Lanes_0849.cD1000,E2,,25,7.10,,437,,,Lower Marker
+Comparison_25_Lanes_0849.cD1000,E2,,100,0.444,,6.85,69.18,,
+Comparison_25_Lanes_0849.cD1000,E2,,147,0.0739,,0.773,11.52,,
+Comparison_25_Lanes_0849.cD1000,E2,,257,0.0300,,0.180,4.68,,
+Comparison_25_Lanes_0849.cD1000,E2,,296,0.0558,,0.290,8.71,,
+Comparison_25_Lanes_0849.cD1000,E2,,1500,6.50,6.50,6.67,,,Upper Marker
+Comparison_25_Lanes_0849.cD1000,F2,,25,6.16,,379,,,Lower Marker
+Comparison_25_Lanes_0849.cD1000,F2,,111,0.124,,1.72,77.00,,
+Comparison_25_Lanes_0849.cD1000,F2,,265,0.0284,,0.165,17.65,,
+Comparison_25_Lanes_0849.cD1000,F2,,298,0.00860,,0.0444,5.35,,
+Comparison_25_Lanes_0849.cD1000,F2,,1500,6.50,6.50,6.67,,,Upper Marker
+Comparison_25_Lanes_0849.cD1000,G2,,0,0.0390,,NaN,10.12,,Peak outside of Sizing Range
+Comparison_25_Lanes_0849.cD1000,G2,,25,6.38,,393,,,Lower Marker
+Comparison_25_Lanes_0849.cD1000,G2,,100,0.272,,4.20,70.62,,
+Comparison_25_Lanes_0849.cD1000,G2,,146,0.0529,,0.559,13.74,,
+Comparison_25_Lanes_0849.cD1000,G2,,257,0.0213,,0.127,5.52,,
+Comparison_25_Lanes_0849.cD1000,G2,,1500,6.50,6.50,6.67,,,Upper Marker
+Comparison_25_Lanes_0849.cD1000,H2,,0,0.0219,,NaN,4.63,,Peak outside of Sizing Range
+Comparison_25_Lanes_0849.cD1000,H2,,25,7.00,,431,,,Lower Marker
+Comparison_25_Lanes_0849.cD1000,H2,,100,0.369,,5.69,78.36,,
+Comparison_25_Lanes_0849.cD1000,H2,,147,0.0448,,0.467,9.50,,
+Comparison_25_Lanes_0849.cD1000,H2,,283,0.0354,,0.193,7.51,,
+Comparison_25_Lanes_0849.cD1000,H2,,1500,6.50,6.50,6.67,,,Upper Marker
+Comparison_25_Lanes_0849.cD1000,A3,,0,0.00729,,NaN,2.31,,Peak outside of Sizing Range
+Comparison_25_Lanes_0849.cD1000,A3,,25,6.96,,428,,,Lower Marker
+Comparison_25_Lanes_0849.cD1000,A3,,101,0.270,,4.12,85.47,,
+Comparison_25_Lanes_0849.cD1000,A3,,236,0.0386,,0.251,12.22,,
+Comparison_25_Lanes_0849.cD1000,A3,,1500,6.50,6.50,6.67,,,Upper Marker
+Comparison_25_Lanes_0849.cD1000,B3,,25,7.28,,448,,,Lower Marker
+Comparison_25_Lanes_0849.cD1000,B3,,106,0.0397,,0.577,100.00,,
+Comparison_25_Lanes_0849.cD1000,B3,,1500,6.50,6.50,6.67,,,Upper Marker
+Comparison_25_Lanes_0849.cD1000,C3,,25,6.96,,428,,,Lower Marker
+Comparison_25_Lanes_0849.cD1000,C3,,41,0.0761,,2.87,67.27,,
+Comparison_25_Lanes_0849.cD1000,C3,,109,0.0370,,0.524,32.73,,
+Comparison_25_Lanes_0849.cD1000,C3,,1500,6.50,6.50,6.67,,,Upper Marker
+Comparison_25_Lanes_0849.cD1000,D3,,0,0.0365,,NaN,2.91,,Peak outside of Sizing Range
+Comparison_25_Lanes_0849.cD1000,D3,,25,5.85,,360,,,Lower Marker
+Comparison_25_Lanes_0849.cD1000,D3,,99,0.970,,15.1,77.44,,
+Comparison_25_Lanes_0849.cD1000,D3,,147,0.123,,1.29,9.81,,
+Comparison_25_Lanes_0849.cD1000,D3,,179,0.0326,,0.280,2.60,,
+Comparison_25_Lanes_0849.cD1000,D3,,246,0.0259,,0.162,2.07,,
+Comparison_25_Lanes_0849.cD1000,D3,,287,0.0442,,0.237,3.53,,
+Comparison_25_Lanes_0849.cD1000,D3,,647,0.0206,,0.0489,1.64,,
+Comparison_25_Lanes_0849.cD1000,D3,,1500,6.50,6.50,6.67,,,Upper Marker
+Comparison_25_Lanes_0849.cD1000,E3,,0,0.0446,,NaN,5.22,,Peak outside of Sizing Range
+Comparison_25_Lanes_0849.cD1000,E3,,25,5.68,,350,,,Lower Marker
+Comparison_25_Lanes_0849.cD1000,E3,,99,0.588,,9.12,68.83,,
+Comparison_25_Lanes_0849.cD1000,E3,,148,0.0514,,0.536,6.02,,
+Comparison_25_Lanes_0849.cD1000,E3,,182,0.0260,,0.219,3.04,,
+Comparison_25_Lanes_0849.cD1000,E3,,223,0.0242,,0.167,2.83,,
+Comparison_25_Lanes_0849.cD1000,E3,,246,0.0276,,0.173,3.23,,
+Comparison_25_Lanes_0849.cD1000,E3,,289,0.0729,,0.388,8.52,,
+Comparison_25_Lanes_0849.cD1000,E3,,544,0.0198,,0.0560,2.32,,
+Comparison_25_Lanes_0849.cD1000,E3,,1500,6.50,6.50,6.67,,,Upper Marker
+Comparison_25_Lanes_0849.cD1000,F3,,0,0.0414,,NaN,7.57,,Peak outside of Sizing Range
+Comparison_25_Lanes_0849.cD1000,F3,,25,5.91,,364,,,Lower Marker
+Comparison_25_Lanes_0849.cD1000,F3,,100,0.327,,5.05,59.88,,
+Comparison_25_Lanes_0849.cD1000,F3,,146,0.0486,,0.511,8.91,,
+Comparison_25_Lanes_0849.cD1000,F3,,182,0.0163,,0.138,2.98,,
+Comparison_25_Lanes_0849.cD1000,F3,,253,0.0629,,0.383,11.52,,
+Comparison_25_Lanes_0849.cD1000,F3,,291,0.0233,,0.123,4.26,,
+Comparison_25_Lanes_0849.cD1000,F3,,341,0.0163,,0.0735,2.98,,
+Comparison_25_Lanes_0849.cD1000,F3,,648,0.0103,,0.0245,1.89,,
+Comparison_25_Lanes_0849.cD1000,F3,,1500,6.50,6.50,6.67,,,Upper Marker
+Comparison_25_Lanes_0849.cD1000,G3,,0,0.0613,,NaN,7.39,,Peak outside of Sizing Range
+Comparison_25_Lanes_0849.cD1000,G3,,25,5.89,,363,,,edited Lower Marker
+Comparison_25_Lanes_0849.cD1000,G3,,98,0.768,,12.1,92.61,,
+Comparison_25_Lanes_0849.cD1000,G3,,1500,6.50,6.50,6.67,,,Upper Marker
+Comparison_25_Lanes_0849.cD1000,H3,,0,0.0405,,NaN,3.42,,Peak outside of Sizing Range
+Comparison_25_Lanes_0849.cD1000,H3,,25,5.86,,361,,,Lower Marker
+Comparison_25_Lanes_0849.cD1000,H3,,98,0.855,,13.4,72.17,,
+Comparison_25_Lanes_0849.cD1000,H3,,246,0.158,,0.988,13.31,,
+Comparison_25_Lanes_0849.cD1000,H3,,284,0.0314,,0.170,2.65,,
+Comparison_25_Lanes_0849.cD1000,H3,,932,0.100,,0.165,8.46,,
+Comparison_25_Lanes_0849.cD1000,H3,,1500,6.50,6.50,6.67,,,Upper Marker
+Comparison_25_Lanes_0849.cD1000,A4,,0,0.0300,,NaN,6.55,,Peak outside of Sizing Range
+Comparison_25_Lanes_0849.cD1000,A4,,25,5.95,,366,,,Lower Marker
+Comparison_25_Lanes_0849.cD1000,A4,,99,0.343,,5.32,74.92,,
+Comparison_25_Lanes_0849.cD1000,A4,,252,0.0677,,0.413,14.76,,
+Comparison_25_Lanes_0849.cD1000,A4,,287,0.0173,,0.0926,3.77,,
+Comparison_25_Lanes_0849.cD1000,A4,,1500,6.50,6.50,6.67,,,Upper Marker

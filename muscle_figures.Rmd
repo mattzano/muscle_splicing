@@ -1,0 +1,333 @@
+---
+title: "muscle"
+author: "MZ"
+date: "2024-07-02"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+library(tidyverse)
+library(tximport)
+library(DESeq2)
+
+here::here()
+
+source(here::here('scripts', 'salmon_deseq2.R'))
+
+```
+
+## myocytes splicing - reproduce Britson et al paper + i3 Muscle splicing
+
+```{r}
+#myoblasts gene expression - n = 1 so no deseq2
+#salmon_deseq2(sample_dir =  here::here('data', 'salmon'),
+#  metadata_dir =  here::here('data','metadata_muscle_salmon.csv'),
+#  experiment_dir = "myoblasts")
+
+#myobalsts splicing
+splicing_myoblasts <- read.csv()
+sig_junctions_myoblasts <- splicing_myoblasts %>% 
+  filter(control_mean_psi < 0.05, 
+         mean_dpsi_per_lsv_junction > 0.1, 
+         probability_changing > 0.9) %>% 
+  select(c(seqnames,start,end,strand, gene_name))
+#write.table(sig_junctions_myoblasts, here::here('results', 'sig_junctions_myoblasts.bed'), sep = "\t", quote = F, row.names = F)
+
+#i3muscles expression
+salmon_deseq2(sample_dir =  here::here('data', 'salmon'),
+  metadata_dir =  here::here('data','metadata_muscle_salmon.csv'),
+  experiment_dir = "i3muscles")
+normed_counts %>% 
+  filter(symbol == "TARDBP") %>% 
+  pivot_longer(cols = c(2:11)) %>% 
+  mutate(condition = ifelse(name %in% c("2S61", "2S62", "2S63", "2S64", "2S65", "2S66"), "control", "TDP43KD")) %>% 
+  ggplot(aes(x = condition, y = value)) +
+  geom_boxplot() +
+  geom_point(aes(color = condition), position = position_jitter(width = 0.3)) +
+  #scale_y_sr() +
+  theme_classic()
+
+#i3muscle splicing
+splicing_i3muscles <- read.csv(here::here('data/splicing','i3muscles_Control-TDP43KD_annotated_junctions.csv'))
+sig_junctions_i3muscles <- splicing_i3muscles %>% 
+  filter(control_mean_psi < 0.05, 
+         mean_dpsi_per_lsv_junction > 0.1) #%>% #, 
+         #probability_changing > 0.9) %>% 
+  #select(c(seqnames,start,end,strand, gene_name))
+#write.table(sig_junctions_i3muscles, here::here('results', 'sig_junctions_i3muscles.tsv'), sep = "\t", quote = F, row.names = F)
+of_interest <- c("AARS1", "EPB41L4A", "HDGFL2", "PHF2", "PXDN", "SLC24A3", "STMN2", #"ACSF2", 
+                 "ACTL6B", "ARHGAP22", "CELSR3", "DNM1", "IGLON5", "SYNJ2", "MYO18A","PTPRZ1", "NECAB2", "XPO4", "ZNF423") #"ACSF2"
+
+splicing_i3muscles %>% 
+  mutate(probability_changing = ifelse(probability_changing == 1, 0.99995,probability_changing)) %>% 
+  mutate(color_code = ifelse(paste_into_igv_junction %in% sig_junctions_i3muscles$paste_into_igv_junction, "significant","not significant")) %>%
+  mutate(label_code = ifelse(color_code == "significant" & gene_name %in% of_interest, gene_name, NA)) %>% 
+  ggplot(aes(x = mean_dpsi_per_lsv_junction, y = -log10(1-probability_changing))) +
+  geom_point(aes(color = color_code)) +
+  ggrepel::geom_text_repel(aes(label = label_code), max.overlaps = Inf, min.segment.length = 0.2) +
+  #scale_y_continuous(trans = "log10") +
+  theme_classic()
+
+```
+
+## bedparse on in vivo muscle samples
+Britson - 2 CTRL + 2 sIBM
+Buratti - 5 CTRL + 7 sIBM
+Padua   - 4 CTRL + 4 sIBM
+tot      11       13
+
+```{r}
+###figure 1 
+#manual_seq <- read.table("~/Desktop/in_frame_i3_correct.bed")
+of_interest <- c("AARS1", "EPB41L4A", "HDGFL2", "PHF2", "PXDN", "SLC24A3", "STMN2", #"ACSF2", 
+                 "ACTL6B", "ARHGAP22", "CELSR3", "DNM1", "IGLON5", "SYNJ2", "MYO18A","PTPRZ1", "NECAB2", "XPO4", "ZNF423")
+
+splicing_bedparse_invivo <- read.table(here::here("data/significant_aggregated.clean.annotated.bed"), sep = "\t") %>%  #here::here('data', "significant_aggregated.clean.annotated.bed"), sep = "\t") %>% 
+  filter(V7 %in% of_interest) %>% filter(!grepl("SBMA", V4)) %>%  #filter(V7 != "MYO18A") %>% 
+  mutate(V4 = gsub("\\..*","", V4)) %>% 
+  mutate(condition = ifelse(grepl("IBM", V4) | grepl("PT", V4), "IBM", 
+                            ifelse(grepl("CTR", V4) | grepl("Ctrl", V4) | grepl("Control", V4), "Control",
+                                   ifelse(grepl("C9", V4) | grepl("FUS", V4) | grepl("SOD1", V4) | grepl("TDP43", V4), "ALS", "Other muscle diseases")))) %>% 
+  group_by(V4,V7) %>% 
+  arrange(desc(V5)) %>% 
+  distinct(V7, .keep_all = T) %>% 
+  ungroup() %>% 
+#write.table(splicing_bedparse_invivo, "~/Desktop/bedtools.csv", sep = ",", row.names = F, quote = F)
+
+mutate(name_clean = case_when(V4 == "CTR_01" ~ "HC-TS-1", V4 == "CTR_03" ~ "HC-TS-3", V4 == "CTR_04" ~ "HC-TS-4", V4 == "CTR_05" ~ "HC-TS-5", V4 == "CTR_06" ~ "HC-TS-6",
+                              V4 == "Ctrl1" ~ "HC-PD-1", V4 == "Ctrl3" ~ "HC-PD-3", V4 == "Ctrl4" ~ "HC-PD-4",
+                              V4 == "Control1" ~ "HC-JH-1", V4 == "Control2" ~ "HC-JH-2",
+                              V4 == "PT_02" ~ "IBM-TS-2", V4 == "PT_03" ~ "IBM-TS-3", V4 == "PT_04" ~ "IBM-TS-4", V4 == "PT_05" ~ "IBM-TS-5", V4 == "PT_08" ~ "IBM-TS-8", V4 == "PT_09" ~ "IBM-TS-9", V4 == "PT_10" ~ "IBM-TS-10",
+                              V4 == "IBM_2" ~ "IBM-PD-2", V4 == "IBM_3" ~ "IBM-PD-3", V4 == "IBM_4" ~ "IBM-PD-4", V4 == "IBM_5" ~ "IBM-PD-5",
+                              V4 == "IBM1" ~ "IBM-JH-1", V4 == "IBM2" ~ "IBM-JH-2"))
+
+splicing_bedparse_invivo %>% 
+  filter(condition %in% c("Control", "IBM")) %>%
+  ggplot(aes(x = reorder(name_clean,V5,sum), 
+             y = V5, fill = V7)) +
+  geom_col() +
+  scale_fill_viridis_d(direction = -1) +
+  theme_classic() +
+  facet_wrap(~condition, scales = "free_x") +
+  labs(x ="", y="Reads covering cryptic junction", fill = "Gene") +
+  theme(axis.text.x = element_text(angle = 90))
+#ggsave("~/Desktop/figure_4a.png", height = 4.5, width = 8)
+
+###check with normalised values
+#metadata =  read.csv(here::here('data','metadata_muscle_salmon.csv'))
+#metadata_app <- metadata %>% 
+#  filter(experiment != "myoblasts" & experiment != "i3muscles") %>% 
+#  mutate(V4 = sample_name) %>% 
+#  select(-condition) %>% 
+#  left_join(splicing_bedparse_invivo) %>% 
+#  filter(!is.na(condition))
+#metadata_app %>% 
+#  ggplot(aes(x = reorder(V4,V5,sum), 
+#             y = V5,
+#             fill = V7)) +
+#  geom_col() +
+#  scale_fill_viridis_d(direction = -1) +
+#  theme_classic() +
+#  facet_wrap(~condition, scales = "free_x") +
+#  labs(x ="", y="Reads covering cryptic junction", fill = "Gene") +
+#  theme(axis.text.x = element_text(angle = 90))
+
+```
+
+## specificity of muscle cryptic splicing - does it depend on gene expression?
+
+```{r}
+###how to gene tissue gene expression? GTEX / ASCOT
+##figure 2
+##gtex expression 
+list_ce <- c("ENSG00000090861", "ENSG00000077080", "ENSG00000128805", "ENSG00000008300", "ENSG00000106976",
+             "ENSG00000129595", "ENSG00000167674", "ENSG00000142549", "ENSG00000196535", "ENSG00000103154",
+             "ENSG00000197724", "ENSG00000106278", "ENSG00000130508", "ENSG00000185052", 
+             "ENSG00000104435", "ENSG00000078269", "ENSG00000132953", "ENSG00000102935")
+nauc <- read.csv(here::here("data", "gtex_nauc.csv"))
+nauc_ce <- nauc %>% 
+  filter(gene_id %in% list_ce) %>% 
+  mutate(gene_symbol = ifelse(gene_symbol == "CTB-50L17.10", "HDGFL2", gene_symbol)) %>% 
+  pivot_longer(cols = c(3:58)) %>% 
+  #filter(gene_symbol == "NECAB2")
+  filter(grepl("Skeletal", name) | grepl("Frontal.Cortex", name) | grepl("Spinal", name)) %>%  # grepl("Adipose", name)) %>% 
+  mutate(name = case_when(name == "Frontal.Cortex...Brain" ~ "Frontal Cortex",
+                          name == "Skeletal...Muscle" ~ "Skeletal Muscle",
+                          name == "Spinal.cord..C1....Brain" ~ "Spinal Cord"))
+
+nauc_ce %>% 
+  ggplot(aes(y = gene_symbol, x = reorder(name,value), fill = value)) +
+  geom_tile(show.legend = F) +
+  #scale_fill_viridis_c() +
+  scale_fill_gradient(low = "white", high = "black") +
+  ylab("Gene") + xlab("Tissue") + #labs(fill = "gene expression") +
+  scale_y_discrete(limit = rev) +
+  theme_classic() #+
+  #theme(axis.text.x = element_text(angle = 90))
+#ggsave("~/Desktop/figure_4b.png")
+```
+
+
+## TDP-43 levels (RNA-seq, qPCR, proteomics)
+```{r}
+#salmon_deseq2(sample_dir =  here::here('data', 'salmon'),
+#  metadata_dir =  here::here('data','metadata_muscle_salmon.csv'),
+#  experiment_dir = "padua")
+#salmon_deseq2(sample_dir =  here::here('data', 'salmon'),
+#  metadata_dir =  here::here('data','metadata_muscle_salmon.csv'),
+#  experiment_dir = "lloyd")
+#salmon_deseq2(sample_dir =  here::here('data', 'salmon'),
+#  metadata_dir =  here::here('data','metadata_muscle_salmon.csv'),
+#  experiment_dir = "buratti")
+
+salmon_deseq2(sample_dir =  here::here('data', 'salmon'),
+  metadata_dir =  here::here('data','metadata_muscle_salmon.csv'),
+  experiment_dir = "invivo")
+
+normed_counts_long <- normed_counts %>% 
+  filter(symbol %in% c("TRAC", "TRBC1", "TRBC2", "CD3E") | 
+           symbol %in% c("HLA-A", "HLA-B", "HLA-C") |
+           symbol %in% c(#"TAP1", "TAP2", "ERAP1", "ERAP2", "CALR", 
+             "B2M")) %>%  #grepl("HLA", symbol)) %>% #symbol == "TARDBP") %>% 
+  pivot_longer(cols = c(2:25)) %>% 
+  mutate(condition = ifelse(grepl("IBM", name) | grepl("PT", name), "IBM", 
+                            ifelse(grepl("CTR", name) | grepl("Ctrl", name) | grepl("Control", name), "Control",
+                                   ifelse(grepl("C9", name) | grepl("FUS", name) | grepl("SOD1", name) | grepl("TDP43", name), "ALS", "Other muscle diseases")))) #%>% 
+  #mutate(condition = ifelse(grepl("IBM", name) | grepl("PT", name), "IBM", "Control"))
+#write.table(normed_counts_long, "~/Desktop/normed_long.csv", sep = ",", row.names = F, quote = F)
+#normed_clean <- read.csv("~/Desktop/normed_long.csv")
+
+#normed_clean %>% 
+#  filter(symbol %in% c("TRAC", "TRBC1", "TRBC2", "CD3E") | 
+#           symbol %in% c("HLA-A", "HLA-B", "HLA-C")) %>% 
+#    ggplot(aes(x = name_clean, y = value, fill = condition)) +
+#  geom_col() +
+#  facet_wrap(~symbol, nrow = 1, scales = "free_y") +
+#  scale_fill_brewer(palette = "Set2") +
+#  theme_classic() +
+#  labs(x = "", y = "Normalised read counts", fill = "Condition") +
+#  theme(axis.text.x = element_text(angle = 90))
+ 
+#RColorBrewer::brewer.pal(n = 4, "Set2")
+normed_counts_long %>% 
+  mutate(symbol_f = factor(symbol, levels=c('HLA-A','HLA-B','HLA-C', "B2M",'TRAC', 'TRBC1', 'TRBC2', 'CD3E' #"TAP1", "TAP2", "ERAP1", "ERAP2", "CALR", 
+                                           ))) %>% 
+  ggplot(aes(x = reorder(name,value), y = value, fill = condition)) +
+  geom_col() +
+  facet_wrap(~symbol_f, nrow = 2, scales = "free_y") +
+  scale_fill_brewer(palette = "Set2") +
+  theme_classic() +
+  labs(x = "", y = "Normalised read counts", fill = "Condition") +
+  theme(axis.text.x = element_text(angle = 90),
+        legend.position = "bottom")
+#ggsave("~/Desktop/supplementary_figure_4b.pdf", width = 18, height = 8)
+
+violin_plot <- list()
+for (i in c('HLA-A','HLA-B','HLA-C',"B2M",'TRAC', 'TRBC1', 'TRBC2', 'CD3E' 
+            #"TAP1", "TAP2", "ERAP1", "ERAP2", "CALR", "B2M", "TARDBP"
+            )) {
+normed_clean_merged <- splicing_bedparse_invivo %>% 
+  mutate(name = V4) %>% 
+  #filter(!is.na(count_max)) %>% 
+  group_by(name) %>% 
+  summarise(sum(V5)) %>% 
+  #filter(V7 == "HDGFL2") %>% 
+  left_join(normed_counts_long) %>% 
+  filter(symbol == i)
+violin_plot[[i]] <- normed_clean_merged %>%
+  # %>% # & name_clean != "IBM_Trieste_4") %>% 
+  ggplot(aes(x = `sum(V5)`, 
+               y = value)) +
+  geom_point(aes(color = condition), alpha = 0.7, size = 3, show.legend = F) +
+  geom_smooth(method = 'lm', se =F, color = "black") +
+   scale_color_brewer(palette = "Set2") +
+  #geom_label(aes(label = name)) +
+  ggpubr::stat_cor() +
+  labs(x = "Reads covering CE junctions", y = paste0(i," normalised gene expression"), color = "Condition") +
+  theme_bw() +
+  theme(legend.position = "top")
+}
+
+patchwork::wrap_plots(violin_plot, nrow = 2) -> caio
+caio
+#ggsave("~/Desktop/figure_4b.pdf", caio, width = 18, height = 9)
+
+#testo <- lm(value ~ V5 + condition, normed_clean_merged)
+#summary(testo)
+## move onto dataset for which i've done proteomics
+##proteomics - call script
+
+##qpcr
+#qpcr <- readxl::read_xls(here::here("data", "2024-06-05_194804_tdp_plate1.xls"), sheet = "Sheet1")
+#qpcr %>% 
+#  ggplot(aes(x = reorder(proteomics_number,qPCR_delta_TDP), y =qPCR_delta_TDP)) +
+#  geom_point()
+#merged_prot_qpcr <- full_join(qpcr, hei)
+
+#merged_prot_qpcr %>% 
+#  mutate(condition = ifelse(grepl("CTRL", name), "CTRL", "IBM")) %>% 
+#  ggplot(aes(x = -log10(qPCR_delta_TDP), value)) +
+#  geom_point(aes(color = condition)) +
+#  geom_smooth(method = 'lm', se = F) +
+#  ggpubr::stat_cor() +
+#  theme_bw()
+  
+
+```
+
+```{r}
+####correlation TDP43 levels and HLA
+```
+
+```{r}
+#ihc quantification - stats
+##ihc quant 
+
+```
+
+
+```{r}
+#call proteomics script
+```
+
+## alphafold modelling
+
+```{r}
+###visualise on chimerax
+##stat plot
+plt <- readxl::read_xlsx("~/Desktop/muscle_ibm_peptides/Share_with_Matteo/Validated_TCR_AA.xlsx", sheet = 2)
+
+plt[c(1:9),] %>% 
+  #group_by(for_plotting) %>% 
+  rstatix::anova_test(iPTM_TCRpMHC ~ status)
+model <- aov(iPTM_TCRpMHC ~ status + TCR, 
+             data = plt[c(1:9),])
+summary(model)
+#status_p_value <- summary_model$coefficients["Statusunmatched", "Pr(>|t|)"]
+
+# Create a text label for the p-value
+p_value_label <- sprintf("p = %.3f",  0.0612)
+
+plt %>% 
+  ggplot(aes(x = status, y = iPTM_TCRpMHC, group = for_plotting, color = TCR)) +
+  geom_point() +
+  geom_path() +
+  labs(x ="Model", y = "iPTM TCR:pMHC") +
+  annotate("segment", x = 1, xend = 2, y = max(plt$iPTM_TCRpMHC) * 1.03, yend = max(plt$iPTM_TCRpMHC) * 1.03, size = 0.5) +
+  annotate("segment", x = 1, xend = 1, y = max(plt$iPTM_TCRpMHC) * 1.04, yend = max(plt$iPTM_TCRpMHC) * 1.02, size = 0.5) +
+  annotate("segment", x = 2, xend = 2, y = max(plt$iPTM_TCRpMHC) * 1.04, yend = max(plt$iPTM_TCRpMHC) * 1.02, size = 0.5) +
+  
+  annotate("text", x = 1.5, y = max(plt$iPTM_TCRpMHC) * 1.05, 
+             label = p_value_label, size = 4, hjust = 0.5) +
+  theme_bw() +
+  theme(legend.position = "bottom")
+ggsave("~/Desktop/figure_4h.png") 
+
+```
+
+
+```{r}
+####trust4???
+
+```

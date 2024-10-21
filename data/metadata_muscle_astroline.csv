@@ -1,0 +1,5 @@
+﻿sample_name,experiment,condition,gencode,type
+Astroline_control_1,astroline,0,42v,in_vitro
+Astroline_control_2,astroline,0,42v,in_vitro
+Astroline_TDP43KD_1,astroline,1,42v,in_vitro
+Astroline_TDP43KD_2,astroline,1,42v,in_vitro
