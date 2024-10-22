@@ -1,0 +1,22 @@
+{
+    "read_files": "[ /SAN/vyplab/splicing_TDP43/ibm_stm/fastp_trimmed/placeholder_IBM1_1.trimmed.fastq.gz, /SAN/vyplab/splicing_TDP43/ibm_stm/fastp_trimmed/placeholder_IBM1_2.trimmed.fastq.gz]",
+    "expected_format": "ISR",
+    "compatible_fragment_ratio": 1.0,
+    "num_compatible_fragments": 150686069,
+    "num_assigned_fragments": 150686069,
+    "num_frags_with_concordant_consistent_mappings": 149277252,
+    "num_frags_with_inconsistent_or_orphan_mappings": 1490446,
+    "strand_mapping_bias": 0.0000027733552586493417,
+    "MSF": 0,
+    "OSF": 0,
+    "ISF": 414,
+    "MSR": 0,
+    "OSR": 0,
+    "ISR": 149277252,
+    "SF": 598983,
+    "SR": 891049,
+    "MU": 0,
+    "OU": 0,
+    "IU": 0,
+    "U": 0
+}

@@ -1,0 +1,22 @@
+{
+    "read_files": "[ /SAN/vyplab/first_weeks/IBM_buratti/fastp_trimmed/placeholder_PT_08_1.trimmed.fastq.gz, /SAN/vyplab/first_weeks/IBM_buratti/fastp_trimmed/placeholder_PT_08_2.trimmed.fastq.gz]",
+    "expected_format": "IU",
+    "compatible_fragment_ratio": 1.0,
+    "num_compatible_fragments": 51713139,
+    "num_assigned_fragments": 51713139,
+    "num_frags_with_concordant_consistent_mappings": 51622847,
+    "num_frags_with_inconsistent_or_orphan_mappings": 879247,
+    "strand_mapping_bias": 0.501627661101295,
+    "MSF": 0,
+    "OSF": 0,
+    "ISF": 25895448,
+    "MSR": 0,
+    "OSR": 0,
+    "ISR": 25727399,
+    "SF": 420821,
+    "SR": 458426,
+    "MU": 0,
+    "OU": 0,
+    "IU": 0,
+    "U": 0
+}
