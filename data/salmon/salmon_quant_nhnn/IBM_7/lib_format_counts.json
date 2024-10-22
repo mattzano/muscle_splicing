@@ -1,0 +1,22 @@
+{
+    "read_files": "[ /SAN/vyplab/splicing_TDP43/muscle_nhnn/fastp_trimmed/placeholder_IBM_7_1.trimmed.fastq.gz, /SAN/vyplab/splicing_TDP43/muscle_nhnn/fastp_trimmed/placeholder_IBM_7_2.trimmed.fastq.gz]",
+    "expected_format": "ISR",
+    "compatible_fragment_ratio": 1.0,
+    "num_compatible_fragments": 25902852,
+    "num_assigned_fragments": 25902852,
+    "num_frags_with_concordant_consistent_mappings": 25608401,
+    "num_frags_with_inconsistent_or_orphan_mappings": 297511,
+    "strand_mapping_bias": 0.00003834532054130316,
+    "MSF": 0,
+    "OSF": 0,
+    "ISF": 982,
+    "MSR": 0,
+    "OSR": 0,
+    "ISR": 25608401,
+    "SF": 96879,
+    "SR": 199650,
+    "MU": 0,
+    "OU": 0,
+    "IU": 0,
+    "U": 0
+}
