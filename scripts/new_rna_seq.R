@@ -32,12 +32,12 @@ normed_counts_long <- normed_counts %>%
 
 #RColorBrewer::brewer.pal(n = 4, "Set2")
 normed_counts_long %>% 
-  group_by(condition,symbol) %>% 
-  summarise(mean_val = mean(value)) %>% 
+  #group_by(condition,symbol) %>% 
+  #summarise(mean_val = mean(value)) %>% 
   #mutate(symbol_f = factor(symbol, levels=c('HLA-A','HLA-B','HLA-C', "B2M",'TRAC', 'TRBC1', 'TRBC2', 'CD3E' #"TAP1", "TAP2", "ERAP1", "ERAP2", "CALR", 
   #))) %>% 
-  ggplot(aes(x = condition,#reorder(name,value), 
-               y = mean_val, fill = condition)) +
+  ggplot(aes(x = reorder(name,value), 
+               y = value, fill = condition)) +
   geom_col() +
   facet_wrap(~symbol, nrow = 2, scales = "free_y") +
   scale_fill_brewer(palette = "Set2") +
@@ -92,7 +92,7 @@ splicing_bedparse_invivo_normalised <- splicing_bedparse_invivo %>%
 splicing_bedparse_invivo_normalised %>% 
   filter(condition %in% c("Control", "IBM")) %>%
   #dplyr::filter(V7 != "MYO18A" & V7 != "XPO4") %>% 
-  dplyr::filter(V7 == "HDGFL2") %>% 
+  #dplyr::filter(V7 == "HDGFL2") %>% 
   ggplot(aes(x = reorder(V4,V5/paired.reads,sum), 
              y = V5/paired.reads, fill = V7)) +
   geom_col() +

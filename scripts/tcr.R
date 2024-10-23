@@ -1,12 +1,13 @@
 ###trust results
 library(data.table)
 library(tidyverse)
-list_files <- list.files(path = here::here('data', 'trust4/trust4_mayo/')) #"~/Desktop/trust_reports/")
+#list_files <- list.files(path = here::here('data', 'trust4/trust4_mayo/')) #"~/Desktop/trust_reports/")
+list_files <- list.files(path = "~/Desktop/out_nhnn/")
 list_files
 
 merged_file <- list()
 for (i in list_files) {
-  merged_file[[i]] <- read.table(paste0(here::here('data', 'trust4/trust4_mayo/'), i), sep = "\t", header = F)
+  merged_file[[i]] <- read.table(paste0(("~/Desktop/out_nhnn/"), i), sep = "\t", header = F)
 }
 
 trust <- rbindlist(merged_file, id = T) #, fill = T)
@@ -17,9 +18,13 @@ trust_meta <- read.csv(here::here('data/blood_meta.csv')) %>%
 
 trust_annot <- trust %>% 
   mutate(matcher = gsub("^.*_(LP[0-9A-Za-z]+)_.*$", "\\1", .id)) %>%  #gsub("^TRUST_(LP[0-9]+)_.*$", "\\1", .id))# %>% 
-  left_join(trust_meta)
+  left_join(trust_meta) %>% 
+  mutate(disease = ifelse(grepl("2608", matcher) | 
+                            grepl("1123", matcher) |
+                          grepl("1112", matcher) |
+                          grepl("194", matcher), "Ctrl", "IBM"))
 
-trust_tcr <- trust %>%  filter(grepl("TR", V)) %>% filter("CDR3_amino_acids" != "out_of_frame")
+trust_tcr <- trust %>% filter(grepl("TR", V)) %>% filter("CDR3_amino_acids" != "out_of_frame")
 trust %>% 
   #filter(read_count > 10) %>% 
   mutate(tcr = ifelse(grepl("TR", V), "TCR", "IG")) %>% 
@@ -61,15 +66,16 @@ trust_annot %>%
 trust_annot %>% 
   #filter(V1 > 10) %>% 
   mutate(tcr = ifelse(grepl("TR", V), "TCR", "IG")) %>% 
+  #mutate(.id1 = grepl("\\_*", "", .id))
   filter(tcr == "TCR") %>% 
   filter(CDR3_amino_acids != "out_of_frame") %>% 
   #filter() %>% 
   ggplot(aes(x = reorder(.id, read_count), y = read_count, fill = CDR3_amino_acids)) +
   geom_col(show.legend = F) +
-  facet_wrap(~disease, scales = "free") +
+  facet_wrap(~disease, scales = "free_x") +
   scale_fill_viridis_d() +
   theme_classic() +
-  theme(axis.text.x = element_blank()) #element_text(angle = 90))
+  theme(axis.text.x = element_blank())
 
 
 
