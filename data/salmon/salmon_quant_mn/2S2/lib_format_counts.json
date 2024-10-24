@@ -1,0 +1,22 @@
+{
+    "read_files": "[ /SAN/vyplab/splicing_TDP43/muscle/fastp_trimmed/placeholder_2S2_1.trimmed.fastq.gz, /SAN/vyplab/splicing_TDP43/muscle/fastp_trimmed/placeholder_2S2_2.trimmed.fastq.gz]",
+    "expected_format": "ISR",
+    "compatible_fragment_ratio": 1.0,
+    "num_compatible_fragments": 24349208,
+    "num_assigned_fragments": 24349208,
+    "num_frags_with_concordant_consistent_mappings": 22665680,
+    "num_frags_with_inconsistent_or_orphan_mappings": 1825151,
+    "strand_mapping_bias": 0.000016368091645077477,
+    "MSF": 0,
+    "OSF": 0,
+    "ISF": 371,
+    "MSR": 0,
+    "OSR": 0,
+    "ISR": 22665680,
+    "SF": 719204,
+    "SR": 1105576,
+    "MU": 0,
+    "OU": 0,
+    "IU": 0,
+    "U": 0
+}

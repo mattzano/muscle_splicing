@@ -45,8 +45,12 @@ ibm_raw_long <- ibm_raw %>%
   mutate(color_code_level = #ifelse(name %in% immune_neg, "neg",
                                    ifelse(name %in% hd_low, "Low",
                                           ifelse(name %in% hd_high, "High", "NA"))) %>%
-  filter(color_code_level != "NA") %>% 
-  mutate(Pg.Genes = factor(PG.Genes, levels = c(main_list,other_list)))
+  filter(color_code_level != "NA") #%>% 
+  mutate(Pg.Genes = factor(PG.Genes, levels = c(main_list,other_list))) %>% 
+  mutate(color_code_level = factor(color_code_level, levels = c("Low", "High")),
+         PG.Genes = factor(PG.Genes, levels = c("TARDBP", "CD3E", "TRBC2;TRBC1;TRB", "CALR",
+                                                "HLA-A", "HLA-B", "HLA-C", "B2M",
+                                                "ERAP1", "ERAP2", "TAP1", "TAP2")))
   #mutate(color_code_level = ifelse(name %in% tardbp_data$level, "high", "low")) %>% 
   #mutate(#Genes_f = factor(PG.Genes, levels = c('TARDBP', 'CD3E', 'TRBC2;TRBC1;TRB')),
   #  color_code_f = factor(color_code, levels = c("control", "IBM")))
@@ -56,10 +60,6 @@ ibm_raw_long <- ibm_raw %>%
 #)
 symnum.args <- list(cutpoints = c(0, 0.0001, 0.001, 0.01, 0.05, Inf), symbols = c("****", "***", "**", "*", "ns"))
 ibm_raw_long %>% 
-  mutate(color_code_level = factor(color_code_level, levels = c("Low", "High")),
-         PG.Genes = factor(PG.Genes, levels = c("TARDBP", "CD3E", "TRBC2;TRBC1;TRB", "CALR",
-                                                "HLA-A", "HLA-B", "HLA-C", "B2M",
-                                                "ERAP1", "ERAP2", "TAP1", "TAP2"))) %>% 
   ggplot(aes(x = color_code_level, y = value)) +
   geom_boxplot(outliers = F) +
   geom_point(aes(color = color_code), position = position_dodge2(width = 0.5), show.legend = T) +
@@ -75,4 +75,4 @@ ibm_raw_long %>%
   labs(x = "HDGFL2-CE expression", y = "Normalised protein levels", color = "Condition") +
   theme_classic() +
   theme(legend.position = "top")
-ggsave("~/Desktop/figure_4e_graded.png")
+#ggsave("~/Desktop/figure_4e_graded.png")

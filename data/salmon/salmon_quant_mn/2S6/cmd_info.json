@@ -1,0 +1,14 @@
+{
+    "salmon_version": "1.4.0",
+    "index": "/SAN/vyplab/vyplab_reference_genomes/salmon/human_v42/GRCh38/full/gencode_v42.kmer_31",
+    "libType": "A",
+    "mates1": "/SAN/vyplab/splicing_TDP43/muscle/fastp_trimmed/placeholder_2S6_1.trimmed.fastq.gz",
+    "mates2": "/SAN/vyplab/splicing_TDP43/muscle/fastp_trimmed/placeholder_2S6_2.trimmed.fastq.gz",
+    "geneMap": "/SAN/vyplab/vyplab_reference_genomes/annotation/human/GRCh38/gencode.v42.annotation.gtf",
+    "threads": "4",
+    "gcBias": [],
+    "seqBias": [],
+    "numBootstraps": "50",
+    "output": "/SAN/vyplab/splicing_TDP43/muscle/salmon_quant/2S6",
+    "auxDir": "aux_info"
+}

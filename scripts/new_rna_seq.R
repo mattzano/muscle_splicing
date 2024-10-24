@@ -7,11 +7,11 @@ salmon_deseq2(sample_dir =  here::here('data', 'salmon'),
 
 normed_counts_long <- normed_counts %>% 
   #filter(symbol %in% of_interest) %>% 
-  filter(symbol %in% c("TRAC", "TRBC1", "TRBC2", "CD3E") | 
+  filter(symbol %in% c("TRAC", "TRBC1", "TRBC2", "CD3E", "TARDBP") | 
            symbol %in% c("HLA-A", "HLA-B", "HLA-C") |
            symbol %in% c(#"TAP1", "TAP2", "ERAP1", "ERAP2", "CALR", 
              "B2M")) %>%  #grepl("HLA", symbol)) %>% #symbol == "TARDBP") %>% 
-  pivot_longer(cols = c(2:17)) %>% 
+  pivot_longer(cols = c(2:41)) %>% 
   mutate(condition = ifelse(grepl("IBM", name) | grepl("PT", name), "IBM", 
                             ifelse(grepl("CTR", name) | grepl("Ctrl", name) | grepl("Control", name), "Control",
                                    ifelse(grepl("C9", name) | grepl("FUS", name) | grepl("SOD1", name) | grepl("TDP43", name), "ALS", "Other muscle diseases")))) #%>% 
@@ -157,6 +157,7 @@ pca_data <- data.frame(
   Sample = colnames(data_matrix)
 )
 
+
 # Plot PCA
 ggplot(pca_data, aes(x = PC1, y = PC2, label = Sample)) +
   geom_point(size = 4) +
@@ -172,4 +173,29 @@ ggplot(pca_data, aes(x = PC1, y = PC2, label = Sample)) +
 ###go ontology on RNA seq
 
 
+###
+
+###with proteins
+
+names(normed_counts_long)[5] <- "value_rna"
+rna_prot <- ibm_raw_long %>% 
+  mutate(symbol = ifelse(PG.Genes == "TRBC2;TRBC1;TRB", "TRB", PG.Genes),
+         name = recode(name,
+                         "IBM_CTRL_1" = "Ctrl_1",
+                         "IBM_CTRL_2" = "Ctrl_2",
+                         "IBM_CTRL_3" = "Ctrl_3",
+                         "IBM_CTRL_4" = "Ctrl_4")) %>% 
+  left_join(normed_counts_long) %>% 
+  filter(!is.na(value_rna))
+
+rna_prot %>% 
+  filter(!grepl("Ctrl", name)) %>% 
+  ggplot(aes(x = value, y = value_rna)) +
+  geom_point() +
+  geom_label(aes(label = name)) +
+  geom_smooth(method = "lm", se = F, color = "gray") +
+  stat_cor(method = "spearman") +
+  facet_wrap(~symbol, scales = "free") +
+  theme_classic()
+  
 
