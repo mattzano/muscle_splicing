@@ -42,7 +42,7 @@ exons_regions$transcript_id = gsub("\\..*", "", names(exons_regions))
 
 other_loci <- read.table(here::here("data/other_loci.txt"), sep = "\t", header = T)
 
-splicing_bedss <- splicing_bedparse_invivo %>% 
+splicing_bedss <- splicing_bedparse_invivo[,c(1:7)] %>% 
   distinct(V2, .keep_all = T) %>% 
   filter(V2 != "158062221") %>% 
   rbind(other_loci) %>% 

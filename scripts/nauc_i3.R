@@ -39,6 +39,7 @@ splicing_i3muscles %>%
   ggrepel::geom_text_repel(aes(label = label_code), max.overlaps = Inf, min.segment.length = 0.2) +
   #scale_y_continuous(trans = "log10") +
   theme_classic()
+ggsave("~/Desktop/extended_9a.png")
 
 splicing_i3MNs %>% 
   mutate(probability_changing = ifelse(probability_changing == 1, 0.99995,probability_changing)) %>% 
@@ -49,6 +50,7 @@ splicing_i3MNs %>%
   ggrepel::geom_text_repel(aes(label = label_code), max.overlaps = Inf, min.segment.length = 0.2) +
   #scale_y_continuous(trans = "log10") +
   theme_classic()
+ggsave("~/Desktop/extended_9b.png")
 
 splicing_i3corticals %>% 
   mutate(probability_changing = ifelse(probability_changing == 1, 0.99995,probability_changing)) %>% 
@@ -59,6 +61,7 @@ splicing_i3corticals %>%
   ggrepel::geom_text_repel(aes(label = label_code), max.overlaps = Inf, min.segment.length = 0.2) +
   #scale_y_continuous(trans = "log10") +
   theme_classic()
+ggsave("~/Desktop/extended_9c.png")
 
 #splicing_i3astros %>% 
 #  mutate(probability_changing = ifelse(probability_changing == 1, 0.99995,probability_changing)) %>% 
@@ -97,6 +100,7 @@ nauc_ce_labs %>%
   ylab("Gene") + xlab("Tissue") + #labs(fill = "gene expression") +
   scale_y_discrete(limit = rev) +
   theme_classic()
+ggsave("~/Desktop/fig_xx.png")
 
 prot_i3 <- read.csv(here::here("data/20230114_MCP_Report_protein_total 2.csv")) %>% 
   filter(PG.Genes %in% of_interest | PG.Genes == "TARDBP") %>%

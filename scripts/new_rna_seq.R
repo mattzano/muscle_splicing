@@ -91,7 +91,7 @@ splicing_bedparse_invivo_normalised <- splicing_bedparse_invivo %>%
 
 splicing_bedparse_invivo_normalised %>% 
   filter(condition %in% c("Control", "IBM")) %>%
-  #dplyr::filter(V7 != "MYO18A" & V7 != "XPO4") %>% 
+  dplyr::filter(V7 != "MYO18A") %>% # & V7 != "XPO4") %>% 
   #dplyr::filter(V7 == "HDGFL2") %>% 
   ggplot(aes(x = reorder(V4,V5/paired.reads,sum), 
              y = V5/paired.reads, fill = V7)) +

@@ -117,3 +117,7 @@ trust_shortlist %>%
   facet_wrap(~disease, scales = "free_x") +
   theme_classic() +
   theme(axis.text.x = element_text(angle = 90))
+
+
+
+##### add analysis on tcrb-V types?
