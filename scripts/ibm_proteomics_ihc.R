@@ -64,7 +64,9 @@ ibm_raw_long <- ibm_raw %>%
 #)
 symnum.args <- list(cutpoints = c(0, 0.0001, 0.001, 0.01, 0.05, Inf), symbols = c("****", "***", "**", "*", "ns"))
 ibm_raw_long %>% 
-  ggplot(aes(x = color_code_level, y = value)) +
+  mutate(alpha_man = ifelse(is.nan(value), "0", "1"),
+         value_man = ifelse(is.nan(value), 0, value)) %>% 
+  ggplot(aes(x = color_code_level, y = value_man)) +
   geom_boxplot(outliers = F) +
   geom_point(aes(color = color_code), position = position_dodge2(width = 0.5), show.legend = T) +
   ggpubr::stat_compare_means(method = "wilcox", paired = F, symnum.args = symnum.args, 
@@ -72,6 +74,7 @@ ibm_raw_long %>%
                      ) +
   #stat_kruskal_test(#group.by = 'x.var',
   #  position = position_nudge(y = 100)) +
+  scale_alpha_manual(values = c(0.5,1)) +
   scale_y_continuous(expand = expansion(mult = c(0.05, 0.20))) +
   facet_wrap(~PG.Genes, nrow = 3,  scales = "free_y") +
   #scale_color_viridis_d(begin = 0.4, end = 0.9) +
@@ -79,7 +82,7 @@ ibm_raw_long %>%
   labs(x = "HDGFL2-CE expression", y = "Normalised protein levels", color = "Condition") +
   theme_classic() +
   theme(legend.position = "top")
-#ggsave("~/Desktop/figure_4e_graded.png")
+ggsave("~/Desktop/figure_4e_graded.png", width = 10)
 
 ibm_raw_long_suppl <- ibm_raw %>% 
 #grepl("PSMB8", PG.Genes) | grepl("PSMB9", PG.Genes) | grepl("PTPRC", PG.Genes) |
