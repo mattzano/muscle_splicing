@@ -6,18 +6,20 @@ of_interest <- c("AARS1", "EPB41L4A", "HDGFL2", "PHF2", "PXDN", "SLC24A3", "STMN
 
 splicing_i3muscles <- read.csv(here::here('data/splicing','i3muscles_Control-TDP43KD_annotated_junctions.csv')) %>% 
   mutate(sig = ifelse(control_mean_psi < 0.05 & mean_dpsi_per_lsv_junction > 0.1, "yes", "no"),
-         gene_of_interest = ifelse(gene_name %in% of_interest, "yes", "no"))
+         gene_of_interest = ifelse(gene_name %in% of_interest, "yes", "no"),
+         experiment = "muscle")
 
-splicing_i3MNs <- read.csv(here::here('data/splicing', "MN_Control-TDP43KD_annotated_junctions.csv")) %>% 
-  mutate(sig = ifelse(control_mean_psi < 0.05 & mean_dpsi_per_lsv_junction > 0.1, "yes", "no"),
-         gene_of_interest = ifelse(gene_name %in% of_interest, "yes", "no")) 
-sig_junctions_i3MNs <- splicing_i3MNs %>% 
-  filter(control_mean_psi < 0.05, 
-         mean_dpsi_per_lsv_junction > 0.1)
+#splicing_i3MNs <- read.csv(here::here('data/splicing', "MN_Control-TDP43KD_annotated_junctions.csv")) %>% 
+#  mutate(sig = ifelse(control_mean_psi < 0.05 & mean_dpsi_per_lsv_junction > 0.1, "yes", "no"),
+#         gene_of_interest = ifelse(gene_name %in% of_interest, "yes", "no")) 
+#sig_junctions_i3MNs <- splicing_i3MNs %>% 
+#  filter(control_mean_psi < 0.05, 
+#         mean_dpsi_per_lsv_junction > 0.1)
 
 splicing_i3corticals <- read.csv(here::here('data/splicing', "Cortical_Control-TDP43KD_annotated_junctions.csv")) %>% 
   mutate(sig = ifelse(control_mean_psi < 0.05 & mean_dpsi_per_lsv_junction > 0.1, "yes", "no"),
-         gene_of_interest = ifelse(gene_name %in% of_interest, "yes", "no")) 
+         gene_of_interest = ifelse(gene_name %in% of_interest, "yes", "no"),
+         experiment = "cortex") 
 sig_junctions_i3corticals <- splicing_i3corticals %>% 
   filter(control_mean_psi < 0.05, 
          mean_dpsi_per_lsv_junction > 0.1)
@@ -39,18 +41,18 @@ splicing_i3muscles %>%
   ggrepel::geom_text_repel(aes(label = label_code), max.overlaps = Inf, min.segment.length = 0.2) +
   #scale_y_continuous(trans = "log10") +
   theme_classic()
-ggsave("~/Desktop/extended_9a.png")
+#ggsave("~/Desktop/extended_9a.png")
 
-splicing_i3MNs %>% 
-  mutate(probability_changing = ifelse(probability_changing == 1, 0.99995,probability_changing)) %>% 
-  #mutate(color_code = ifelse(paste_into_igv_junction %in% sig_junctions_i3muscles$paste_into_igv_junction, "significant","not significant")) %>%
-  mutate(label_code = ifelse(sig == "yes" & gene_name %in% of_interest, gene_name, NA)) %>% 
-  ggplot(aes(x = mean_dpsi_per_lsv_junction, y = -log10(1-probability_changing))) +
-  geom_point(aes(color = sig)) +
-  ggrepel::geom_text_repel(aes(label = label_code), max.overlaps = Inf, min.segment.length = 0.2) +
-  #scale_y_continuous(trans = "log10") +
-  theme_classic()
-ggsave("~/Desktop/extended_9b.png")
+#splicing_i3MNs %>% 
+#  mutate(probability_changing = ifelse(probability_changing == 1, 0.99995,probability_changing)) %>% 
+#  #mutate(color_code = ifelse(paste_into_igv_junction %in% sig_junctions_i3muscles$paste_into_igv_junction, "significant","not significant")) %>%
+#  mutate(label_code = ifelse(sig == "yes" & gene_name %in% of_interest, gene_name, NA)) %>% 
+#  ggplot(aes(x = mean_dpsi_per_lsv_junction, y = -log10(1-probability_changing))) +
+#  geom_point(aes(color = sig)) +
+#  ggrepel::geom_text_repel(aes(label = label_code), max.overlaps = Inf, min.segment.length = 0.2) +
+#  #scale_y_continuous(trans = "log10") +
+#  theme_classic()
+#ggsave("~/Desktop/extended_9b.png")
 
 splicing_i3corticals %>% 
   mutate(probability_changing = ifelse(probability_changing == 1, 0.99995,probability_changing)) %>% 
@@ -61,7 +63,7 @@ splicing_i3corticals %>%
   ggrepel::geom_text_repel(aes(label = label_code), max.overlaps = Inf, min.segment.length = 0.2) +
   #scale_y_continuous(trans = "log10") +
   theme_classic()
-ggsave("~/Desktop/extended_9c.png")
+#ggsave("~/Desktop/extended_9c.png")
 
 #splicing_i3astros %>% 
 #  mutate(probability_changing = ifelse(probability_changing == 1, 0.99995,probability_changing)) %>% 
@@ -76,9 +78,9 @@ ggsave("~/Desktop/extended_9c.png")
 list_ce_i3corticals <- splicing_i3corticals %>% 
   filter(sig == "yes" & gene_of_interest == "yes") %>% 
   pull(gene_name) %>% unique() %>% sort()
-list_ce_i3lmns <- splicing_i3MNs %>% 
-  filter(sig == "yes" & gene_of_interest == "yes") %>% 
-  pull(gene_name) %>% unique() %>% sort()
+#list_ce_i3lmns <- splicing_i3MNs %>% 
+#  filter(sig == "yes" & gene_of_interest == "yes") %>% 
+#  pull(gene_name) %>% unique() %>% sort()
 list_ce_i3muscles <- splicing_i3muscles %>% 
   filter(sig == "yes" & gene_of_interest == "yes") %>% 
   pull(gene_name) %>% unique() %>% sort()
@@ -87,7 +89,7 @@ nauc_ce_labs <- nauc_ce %>%
   mutate(gene_symbol = ifelse(gene_symbol == "AARS", "AARS1", gene_symbol)) %>% 
   group_by(name) %>% 
   mutate(splicing_i3 = case_when(name == "Frontal Cortex" & gene_symbol %in% list_ce_i3corticals ~ "yes",
-                                 name == "Spinal Cord" & gene_symbol %in% list_ce_i3lmns ~ "yes",
+                                 #name == "Spinal Cord" & gene_symbol %in% list_ce_i3lmns ~ "yes",
                                  name == "Skeletal Muscle" & gene_symbol %in% list_ce_i3muscles ~ "yes")) 
 
 nauc_ce_labs %>% 

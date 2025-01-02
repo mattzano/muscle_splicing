@@ -18,7 +18,7 @@ pca_plt %>%
   scale_color_brewer(palette =  "Set2") +
   scale_alpha_manual(values = c(0.1,1)) +
   theme_bw()
-
+#ggsave("~/Desktop/suppl_13a.png")
 #umap_plt <- read.table(here::here("data/Muscle_Proteome_Fratta group/clustering/UMAP_labels.tsv"), sep = "\t", header = T)
 
 #umap_plt %>% 
@@ -79,10 +79,10 @@ ibm_raw_long %>%
   facet_wrap(~PG.Genes, nrow = 3,  scales = "free_y") +
   #scale_color_viridis_d(begin = 0.4, end = 0.9) +
   scale_color_brewer(palette = "Set2") +
-  labs(x = "HDGFL2-CE expression", y = "Normalised protein levels", color = "Condition") +
+  labs(x = "HDGFL2 cryptic peptide expression", y = "Normalised protein levels", color = "Condition") +
   theme_classic() +
   theme(legend.position = "top")
-ggsave("~/Desktop/figure_4e_graded.png", width = 10)
+#ggsave("~/Desktop/figure_4e_graded.png", width = 10)
 
 ibm_raw_long_suppl <- ibm_raw %>% 
 #grepl("PSMB8", PG.Genes) | grepl("PSMB9", PG.Genes) | grepl("PTPRC", PG.Genes) |
@@ -128,7 +128,7 @@ ibm_raw_long_suppl %>%
   facet_wrap(~PG.Genes, nrow = 4,  scales = "free_y") +
   #scale_color_viridis_d(begin = 0.4, end = 0.9) +
   scale_color_brewer(palette = "Set2") +
-  labs(x = "HDGFL2-CE expression", y = "Normalised protein levels", color = "Condition") +
+  labs(x = "HDGFL2 cryptic peptide expression", y = "Normalised protein levels", color = "Condition") +
   theme_classic() +
   theme(legend.position = "top")
-ggsave("~/Desktop/suppl_prot.png", width = 12)
+#ggsave("~/Desktop/suppl_prot.png", width = 12)

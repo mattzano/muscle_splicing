@@ -17,6 +17,140 @@ source(here::here('scripts', 'salmon_deseq2.R'))
 
 ```
 
+## figure 1b - volcano plots in i3neurons and i3muscles
+```{r}
+#download data and do
+splicing_corticals <- read.csv(here::here("data/S1A.csv"))[,c(1:14)] %>% 
+  mutate(Experiment = "i3Neurons",
+         sig = ifelse(control_mean_psi < 0.05 & probability_changing > 0.9, "yes", "no"))
+splicing_i3muscles <- read.csv(here::here('data/splicing','i3muscles_Control-TDP43KD_annotated_junctions.csv'))[,c(1:14)] %>% 
+  mutate(Experiment = "i3Muscles",
+         sig = ifelse(control_mean_psi < 0.05 & probability_changing > 0.9, "yes", "no"))
+
+
+splicing_together <- splicing_i3muscles %>%
+  rbind(splicing_corticals)%>% 
+  mutate(alpha_code = ifelse(gene_name %in% of_interest & sig == "yes", "high", "low")) %>% 
+  mutate(Gene = ifelse(gene_name %in% of_interest, gene_name, NA)) %>% 
+  mutate(probability_changing = ifelse(probability_changing > 0.999, 0.999, probability_changing)) %>% 
+  mutate(label_code = ifelse(#sig == "yes" & 
+    gene_name %in% of_interest, gene_name, NA))
+
+  
+
+splicing_together %>% 
+  #filter(mean_dpsi_per_lsv_junction >0) %>% 
+  ggplot(aes(x = mean_dpsi_per_lsv_junction, y = -log10(1-probability_changing), alpha = alpha_code)) +
+  geom_point(aes(shape = Experiment, color = Gene), size = 3) +
+  #ggrepel::geom_text_repel(aes(label = label_code), max.overlaps = Inf, min.segment.length = 0.2) +
+  #scale_y_continuous(trans = "log10") +
+  labs(x = "Delta PSI between TDP-43 KD and control", y = "Statistic") +
+  scale_color_viridis_d(direction = -1, na.value = "black",
+                        guide =
+                         guide_legend(label.theme = element_text(angle = 0, face = "italic"))) +
+  scale_alpha_manual(values = c(1,0.01), guide = "none") +
+  #scale_alpha(guide = 'none') +
+  theme_classic() +
+  theme(text = element_text(size = 18)) #,
+        #legend.text = element_text(face = "italic"))
+ggsave("~/Desktop/fig1_full.png",width = 8)
+```
+
+## extended figure 9 - postar
+```{r}
+# link to postar script - done
+```
+
+## extended figure 10 - rna
+```{r}
+# Myo18a and stmn2 igv tracks - done
+
+# pca overall - done
+### script alltogether_rna
+
+# gene expression in tissue - script below here - done
+
+# gene expression of t cell genes + hlas
+
+
+```
+
+## specificity of muscle cryptic splicing - does it depend on gene expression?
+```{r}
+###how to gene tissue gene expression? GTEX / ASCOT
+##figure 2
+##gtex expression 
+list_ce <- c("ENSG00000090861", "ENSG00000077080", "ENSG00000128805", "ENSG00000008300", "ENSG00000106976",
+             "ENSG00000129595", "ENSG00000167674", "ENSG00000142549", "ENSG00000196535", "ENSG00000103154",
+             "ENSG00000197724", "ENSG00000106278", "ENSG00000130508", "ENSG00000185052", 
+             "ENSG00000104435", "ENSG00000078269", "ENSG00000132953", "ENSG00000102935")
+nauc <- read.csv(here::here("data", "gtex_nauc.csv"))
+nauc_ce <- nauc %>% 
+  filter(gene_id %in% list_ce) %>% 
+  mutate(gene_symbol = ifelse(gene_symbol == "CTB-50L17.10", "HDGFL2", 
+                              ifelse(gene_symbol == "AARS", "AARS1", gene_symbol))) %>% 
+  pivot_longer(cols = c(3:58)) %>% 
+  #filter(gene_symbol == "NECAB2")
+  filter(grepl("Skeletal", name) | grepl("Frontal.Cortex", name)) %>%  # grepl("Spinal", name)) %>%  # grepl("Adipose", name)) %>% 
+  mutate(name = case_when(name == "Frontal.Cortex...Brain" ~ "Frontal Cortex",
+                          name == "Skeletal...Muscle" ~ "Skeletal Muscle",
+                          name == "Spinal.cord..C1....Brain" ~ "Spinal Cord"))
+
+nauc_ce %>% 
+  ggplot(aes(y = gene_symbol, x = reorder(name,value), fill = value)) +
+  geom_tile(show.legend = F) +
+  #scale_fill_viridis_c() +
+  scale_fill_gradient(low = "white", high = "black") +
+  ylab("Gene") + xlab("Tissue") + #labs(fill = "gene expression") +
+  scale_y_discrete(limit = rev) +
+  theme_classic() +
+  theme(axis.text.y = element_text(face = "italic"))
+#ggsave("~/Desktop/figure_4b.png")
+```
+
+
+## figure 5
+```{r}
+# A and B - done
+
+# C - proteomics - done
+
+# D - RNA-seq CEs - done
+
+# E - RNA-seq correlations - done
+```
+
+## extended figure 11
+```{r}
+# IHC full set - done
+```
+
+## extended figure 12
+```{r}
+# A - other proteins levels - done
+
+# B - GO analysis - done
+
+# C - normalised read counts - done
+
+# D - PCA proteomics - done
+
+# E - PCA RNA - done
+```
+
+## extended figure 13
+```{r}
+# NYGC expression of CEs - done
+```
+
+
+
+
+
+
+
+
+
 ## myocytes splicing - reproduce Britson et al paper + i3 Muscle splicing
 
 ```{r}
@@ -110,8 +244,9 @@ splicing_bedparse_invivo %>%
   scale_fill_viridis_d(direction = -1) +
   theme_classic() +
   facet_wrap(~condition, scales = "free_x") +
-  labs(x ="", y="Reads covering cryptic junction", fill = "Gene") +
-  theme(axis.text.x = element_text(angle = 90))
+  labs(x ="", y="Reads covering cryptic exon junction", fill = "Gene") +
+  theme(axis.text.x = element_text(angle = 90),
+        legend.text = element_text(face = "italic"))
 #ggsave("~/Desktop/figure_4a.png", height = 4.5, width = 8)
 
 ###check with normalised values
@@ -134,40 +269,6 @@ splicing_bedparse_invivo %>%
 #  theme(axis.text.x = element_text(angle = 90))
 
 ```
-
-## specificity of muscle cryptic splicing - does it depend on gene expression?
-
-```{r}
-###how to gene tissue gene expression? GTEX / ASCOT
-##figure 2
-##gtex expression 
-list_ce <- c("ENSG00000090861", "ENSG00000077080", "ENSG00000128805", "ENSG00000008300", "ENSG00000106976",
-             "ENSG00000129595", "ENSG00000167674", "ENSG00000142549", "ENSG00000196535", "ENSG00000103154",
-             "ENSG00000197724", "ENSG00000106278", "ENSG00000130508", "ENSG00000185052", 
-             "ENSG00000104435", "ENSG00000078269", "ENSG00000132953", "ENSG00000102935")
-nauc <- read.csv(here::here("data", "gtex_nauc.csv"))
-nauc_ce <- nauc %>% 
-  filter(gene_id %in% list_ce) %>% 
-  mutate(gene_symbol = ifelse(gene_symbol == "CTB-50L17.10", "HDGFL2", gene_symbol)) %>% 
-  pivot_longer(cols = c(3:58)) %>% 
-  #filter(gene_symbol == "NECAB2")
-  filter(grepl("Skeletal", name) | grepl("Frontal.Cortex", name) | grepl("Spinal", name)) %>%  # grepl("Adipose", name)) %>% 
-  mutate(name = case_when(name == "Frontal.Cortex...Brain" ~ "Frontal Cortex",
-                          name == "Skeletal...Muscle" ~ "Skeletal Muscle",
-                          name == "Spinal.cord..C1....Brain" ~ "Spinal Cord"))
-
-nauc_ce %>% 
-  ggplot(aes(y = gene_symbol, x = reorder(name,value), fill = value)) +
-  geom_tile(show.legend = F) +
-  #scale_fill_viridis_c() +
-  scale_fill_gradient(low = "white", high = "black") +
-  ylab("Gene") + xlab("Tissue") + #labs(fill = "gene expression") +
-  scale_y_discrete(limit = rev) +
-  theme_classic() #+
-  #theme(axis.text.x = element_text(angle = 90))
-#ggsave("~/Desktop/figure_4b.png")
-```
-
 
 ## TDP-43 levels (RNA-seq, qPCR, proteomics)
 ```{r}

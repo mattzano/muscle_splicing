@@ -1,0 +1,22 @@
+{
+    "read_files": "[ /SAN/vyplab/splicing_TDP43/muscle_padua/fastp_trimmed/placeholder_SBMA_6_1.trimmed.fastq.gz, /SAN/vyplab/splicing_TDP43/muscle_padua/fastp_trimmed/placeholder_SBMA_6_2.trimmed.fastq.gz]",
+    "expected_format": "ISR",
+    "compatible_fragment_ratio": 1.0,
+    "num_compatible_fragments": 36174320,
+    "num_assigned_fragments": 36174320,
+    "num_frags_with_concordant_consistent_mappings": 35224427,
+    "num_frags_with_inconsistent_or_orphan_mappings": 965792,
+    "strand_mapping_bias": 0.0000062740158538986678,
+    "MSF": 0,
+    "OSF": 0,
+    "ISF": 221,
+    "MSR": 0,
+    "OSR": 0,
+    "ISR": 35224427,
+    "SF": 141787,
+    "SR": 823784,
+    "MU": 0,
+    "OU": 0,
+    "IU": 0,
+    "U": 0
+}

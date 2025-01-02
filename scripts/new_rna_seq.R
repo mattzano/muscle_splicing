@@ -199,3 +199,34 @@ rna_prot %>%
   theme_classic()
   
 
+
+
+
+
+# Plot PCA
+pca_plt_meta <- pca_plt[,c(22:29)] %>% 
+  dplyr::mutate(has_ihc = ifelse(ihc_immune == "", "no", "yes")) %>% 
+  dplyr::mutate(HDGFL2_CE = ifelse(sample %in% hd_low, "low", 
+                                   ifelse(sample %in% hd_high, "high", "NA"))) %>% 
+  dplyr::mutate(sample = recode(sample,
+                                "IBM_CTRL_1" = "Ctrl_1",
+                                "IBM_CTRL_2" = "Ctrl_2",
+                                "IBM_CTRL_3" = "Ctrl_3",
+                                "IBM_CTRL_4" = "Ctrl_4")) 
+
+pca_data2 <- pca_data %>% 
+  mutate(sample = Sample) %>% 
+  left_join(pca_plt_meta)
+
+pca_data2 %>% 
+  #select(-(c("IBM_1", "IBM_4", "IBM_5", "IBM_7", "6" "11", "12", "14")))
+  #dplyr::mutate(has_ihc = ifelse(ihc_immune == "", "no", "yes")) %>% 
+  #dplyr::mutate(HDGFL2_CE = ifelse(sample %in% hd_low, "low", 
+  #                                 ifelse(sample %in% hd_high, "high", "NA"))) %>% 
+  ggplot(aes(x = PC1, y = PC2, color = HDGFL2_CE, alpha = has_ihc, shape = Condition)) +
+  geom_point(size = 3) +
+  ggrepel::geom_text_repel(aes(label = sample), color = "black", show.legend = F) +
+  scale_color_brewer(palette =  "Set2") +
+  scale_alpha_manual(values = c(0.1,1)) +
+  theme_bw()
+ggsave("~/Desktop/pca_rna_nhnn.png")

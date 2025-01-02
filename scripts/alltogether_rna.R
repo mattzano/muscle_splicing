@@ -3,7 +3,7 @@ salmon_deseq2(sample_dir =  here::here('data', 'salmon'),
               experiment_dir = "invivo")
 
 # Prepare the data (replace with your actual data)
-data <- normed_counts[,c(1:17)] #%>%  ###26
+data <- normed_counts[,c(1:41)] #%>%  ### 17 or 41
 #select(-(c("IBM_1", "IBM_4", "IBM_5", "IBM_7")))
 #"Ctrl_3", "Ctrl_1", "Ctrl_4","Ctrl_2", "IBM_5", "IBM_7", "IBM_17"))) #,
 #"IBM_1", "IBM_4", "IBM_5", "IBM_7")))
@@ -25,52 +25,18 @@ pca_data <- data.frame(
   Sample = colnames(data_matrix)
 )
 
-# Plot PCA
-pca_plt_meta <- pca_plt[,c(22:29)] %>% 
-  dplyr::mutate(has_ihc = ifelse(ihc_immune == "", "no", "yes")) %>% 
-  dplyr::mutate(HDGFL2_CE = ifelse(sample %in% hd_low, "low", 
-                                   ifelse(sample %in% hd_high, "high", "NA"))) %>% 
-  dplyr::mutate(sample = recode(sample,
-                                "IBM_CTRL_1" = "Ctrl_1",
-                                "IBM_CTRL_2" = "Ctrl_2",
-                                "IBM_CTRL_3" = "Ctrl_3",
-                                "IBM_CTRL_4" = "Ctrl_4")) 
 
-pca_data2 <- pca_data %>% 
-  mutate(sample = Sample) %>% 
-  left_join(pca_plt_meta)
-  
-pca_data2 %>% 
-  #select(-(c("IBM_1", "IBM_4", "IBM_5", "IBM_7", "6" "11", "12", "14")))
-  #dplyr::mutate(has_ihc = ifelse(ihc_immune == "", "no", "yes")) %>% 
-  #dplyr::mutate(HDGFL2_CE = ifelse(sample %in% hd_low, "low", 
-  #                                 ifelse(sample %in% hd_high, "high", "NA"))) %>% 
-  ggplot(aes(x = PC1, y = PC2, color = HDGFL2_CE, alpha = has_ihc, shape = Condition)) +
-  geom_point(size = 3) +
-  ggrepel::geom_text_repel(aes(label = sample), color = "black", show.legend = F) +
-  scale_color_brewer(palette =  "Set2") +
-  scale_alpha_manual(values = c(0.1,1)) +
-  theme_bw()
-ggsave("~/Desktop/pca_rna.png")
 
-pca_data2 %>% 
-  ggplot(aes(x = PC1, y = PC2, label = Sample, color = HDGFL2_CE, )) +
-  geom_point(size = 4) +
-  geom_text(vjust = -1) +
-  ggtitle("PCA Plot of Gene Expression Data") +
-  xlab(paste("PC1 (", round(100 * summary(pca)$importance[2, 1], 2), "%)", sep = "")) +
-  ylab(paste("PC2 (", round(100 * summary(pca)$importance[2, 2], 2), "%)", sep = "")) +
-  theme_minimal()
-  
 
 ggplot(pca_data, aes(x = PC1, y = PC2, label = Sample)) +
   geom_point(size = 4) +
-  geom_text(vjust = -1) +
+  ggrepel::geom_text_repel(max.overlaps = Inf) +
+  #geom_text(vjust = -1) +
   ggtitle("PCA Plot of Gene Expression Data") +
   xlab(paste("PC1 (", round(100 * summary(pca)$importance[2, 1], 2), "%)", sep = "")) +
   ylab(paste("PC2 (", round(100 * summary(pca)$importance[2, 2], 2), "%)", sep = "")) +
   theme_minimal()
-ggsave("~/Desktop/pca_rna.png", width = 10)
+#ggsave("~/Desktop/pca_rna_full.png", width = 10)
 
 
 res <- cor(data_matrix)
@@ -93,7 +59,17 @@ normed_counts_long <- normed_counts %>%
   pivot_longer(cols = c(2:41)) %>% 
   mutate(condition = ifelse(grepl("IBM", name) | grepl("PT", name), "IBM", 
                             ifelse(grepl("CTR", name) | grepl("Ctrl", name) | grepl("Control", name), "Control",
-                                   ifelse(grepl("C9", name) | grepl("FUS", name) | grepl("SOD1", name) | grepl("TDP43", name), "ALS", "Other muscle diseases")))) #%>% 
+                                   ifelse(grepl("C9", name) | grepl("FUS", name) | grepl("SOD1", name) | grepl("TDP43", name), "ALS", "Other muscle diseases")))) %>% 
+
+###clean names
+mutate(name_clean = case_when(name == "CTR_01" ~ "HC-VR-1", name == "CTR_03" ~ "HC-VR-3", name == "CTR_04" ~ "HC-VR-4", name == "CTR_05" ~ "HC-VR-5", name == "CTR_06" ~ "HC-VR-6",
+                              name == "Ctrl1" ~ "HC-PD-1",  name == "Ctrl2" ~ "HC-PD-2", name == "Ctrl3" ~ "HC-PD-3", name == "Ctrl4" ~ "HC-PD-4",
+                              name == "Control1" ~ "HC-JH-1", name == "Control2" ~ "HC-JH-2",
+                              name == "PT_02" ~ "IBM-VR-2", name == "PT_03" ~ "IBM-VR-3", name == "PT_04" ~ "IBM-VR-4", name == "PT_05" ~ "IBM-VR-5", name == "PT_08" ~ "IBM-VR-8", name == "PT_09" ~ "IBM-VR-9", name == "PT_10" ~ "IBM-VR-10",
+                              name == "IBM_2" ~ "IBM-PD-2", name == "IBM_3" ~ "IBM-PD-3", name == "IBM_4" ~ "IBM-PD-4", name == "IBM_5" ~ "IBM-PD-5",
+                              name == "IBM1" ~ "IBM-JH-1", name == "IBM2" ~ "IBM-JH-2", .default = name
+                              ))
+
 
 
 normed_counts_long %>% 
@@ -101,7 +77,7 @@ normed_counts_long %>%
   #summarise(mean_val = mean(value)) %>% 
   mutate(symbol_f = factor(symbol, levels=c('HLA-A','HLA-B','HLA-C', "B2M",'TRAC', 'TRBC1', 'TRBC2', 'CD3E' #"TAP1", "TAP2", "ERAP1", "ERAP2", "CALR", 
   ))) %>% 
-  ggplot(aes(x = reorder(name,value,mean), 
+  ggplot(aes(x = reorder(name_clean,value,mean), 
              y = value, fill = condition)) +
   geom_col() +
   facet_wrap(~symbol_f, nrow = 2, scales = "free_y") +
@@ -109,19 +85,20 @@ normed_counts_long %>%
   theme_classic() +
   labs(x = "", y = "Normalised read counts", fill = "Condition") +
   theme(axis.text.x = element_text(angle = 90),
-        legend.position = "bottom")
-#ggsave("~/Desktop/figure_5d.pdf", width = 18, height = 9)
+        legend.position = "bottom",
+        strip.text = element_text(face = "italic"))
+ggsave("~/Desktop/figure_5d.png", width = 18, height = 9)
 
-normed_counts_long %>% 
-  ggplot(aes(x = reorder(name,value), 
-             y = reorder(symbol,value), 
-             fill = log10(value),
-             group = symbol)) + 
-  geom_tile() +
-  scale_fill_gradient(low = "white", high = "black") +
-  scale_y_discrete(limits = rev) +
-  theme_classic() +
-  theme(axis.text.x = element_text(angle = 90))
+#normed_counts_long %>% 
+#  ggplot(aes(x = reorder(name,value), 
+#             y = reorder(symbol,value), 
+#             fill = log10(value),
+#             group = symbol)) + 
+#  geom_tile() +
+#  scale_fill_gradient(low = "white", high = "black") +
+#  scale_y_discrete(limits = rev) +
+#  theme_classic() +
+#  theme(axis.text.x = element_text(angle = 90))
 
 
 
@@ -140,10 +117,10 @@ splicing_bedparse_invivo <- read.table(here::here("data/significant_aggregated.c
   ungroup() %>% 
   #write.table(splicing_bedparse_invivo, "~/Desktop/bedtools.csv", sep = ",", row.names = F, quote = F)
   
-  mutate(name_clean = case_when(V4 == "CTR_01" ~ "HC-TS-1", V4 == "CTR_03" ~ "HC-TS-3", V4 == "CTR_04" ~ "HC-TS-4", V4 == "CTR_05" ~ "HC-TS-5", V4 == "CTR_06" ~ "HC-TS-6",
+  mutate(name_clean = case_when(V4 == "CTR_01" ~ "HC-VR-1", V4 == "CTR_03" ~ "HC-VR-3", V4 == "CTR_04" ~ "HC-VR-4", V4 == "CTR_05" ~ "HC-VR-5", V4 == "CTR_06" ~ "HC-VR-6",
                                 V4 == "Ctrl1" ~ "HC-PD-1", V4 == "Ctrl3" ~ "HC-PD-3", V4 == "Ctrl4" ~ "HC-PD-4",
                                 V4 == "Control1" ~ "HC-JH-1", V4 == "Control2" ~ "HC-JH-2",
-                                V4 == "PT_02" ~ "IBM-TS-2", V4 == "PT_03" ~ "IBM-TS-3", V4 == "PT_04" ~ "IBM-TS-4", V4 == "PT_05" ~ "IBM-TS-5", V4 == "PT_08" ~ "IBM-TS-8", V4 == "PT_09" ~ "IBM-TS-9", V4 == "PT_10" ~ "IBM-TS-10",
+                                V4 == "PT_02" ~ "IBM-VR-2", V4 == "PT_03" ~ "IBM-VR-3", V4 == "PT_04" ~ "IBM-VR-4", V4 == "PT_05" ~ "IBM-VR-5", V4 == "PT_08" ~ "IBM-VR-8", V4 == "PT_09" ~ "IBM-VR-9", V4 == "PT_10" ~ "IBM-VR-10",
                                 V4 == "IBM_PD_2" ~ "IBM-PD-2", V4 == "IBM_PD_3" ~ "IBM-PD-3", V4 == "IBM_PD_4" ~ "IBM-PD-4", V4 == "IBM_PD_5" ~ "IBM-PD-5",
                                 V4 == "IBM1" ~ "IBM-JH-1", V4 == "IBM2" ~ "IBM-JH-2")) #%>% 
   #mutate(V4 = ifelse(grepl("PD", name_clean) & condition == "IBM", paste0(V4,"_pd"), V4))
@@ -245,18 +222,25 @@ splicing_bedparse_invivo_normalised %>%
 
 
 splicing_bedparse_invivo_normalised %>% 
+  mutate(name_clean = case_when(V4 == "CTR_01" ~ "HC-VR-1", V4 == "CTR_03" ~ "HC-VR-3", V4 == "CTR_04" ~ "HC-VR-4", V4 == "CTR_05" ~ "HC-VR-5", V4 == "CTR_06" ~ "HC-VR-6",
+                                V4 == "Ctrl1" ~ "HC-PD-1", V4 == "Ctrl2" ~ "HC-PD-2", V4 == "Ctrl3" ~ "HC-PD-3", V4 == "Ctrl4" ~ "HC-PD-4",
+                                V4 == "Control1" ~ "HC-JH-1", V4 == "Control2" ~ "HC-JH-2",
+                                V4 == "PT_02" ~ "IBM-VR-2", V4 == "PT_03" ~ "IBM-VR-3", V4 == "PT_04" ~ "IBM-VR-4", V4 == "PT_05" ~ "IBM-VR-5", V4 == "PT_08" ~ "IBM-VR-8", V4 == "PT_09" ~ "IBM-VR-9", V4 == "PT_10" ~ "IBM-VR-10",
+                                V4 == "IBM_PD_2" ~ "IBM-PD-2", V4 == "IBM_PD_3" ~ "IBM-PD-3", V4 == "IBM_PD_4" ~ "IBM-PD-4", V4 == "IBM_PD_5" ~ "IBM-PD-5",
+                                V4 == "IBM1" ~ "IBM-JH-1", V4 == "IBM2" ~ "IBM-JH-2", .default = V4)) %>% 
   #filter(condition %in% c("Control", "IBM")) %>%
-  dplyr::filter(V7 != "MYO18A") %>%  # & V7 != "XPO4" & V7 != "ZNF423") %>% 
+  #dplyr::filter(V7 != "MYO18A") %>%  # & V7 != "XPO4" & V7 != "ZNF423") %>% 
   #dplyr::filter(V7 == "HDGFL2") %>% 
-  ggplot(aes(x = reorder(V4,V5/paired.reads,sum), 
+  ggplot(aes(x = reorder(name_clean,V5/paired.reads,sum), 
              y = V5/paired.reads, fill = V7)) +
   geom_col() +
   scale_fill_viridis_d(direction = -1) +
   theme_classic() +
   facet_wrap(~condition, scales = "free_x") +
   labs(x ="", y="Reads covering cryptic junction", fill = "Gene") +
-  theme(axis.text.x = element_text(angle = 90))
-ggsave("~/Desktop/figure_5d.png")
+  theme(axis.text.x = element_text(angle = 90),
+        legend.text = element_text(face = "italic"))
+ggsave("~/Desktop/figure_5a.png")
 
 violin_plot <- list()
 for (i in c('HLA-A','HLA-B','HLA-C',"B2M",'TRAC', 'TRBC1', 'TRBC2', 'CD3E' 
@@ -287,9 +271,15 @@ for (i in c('HLA-A','HLA-B','HLA-C',"B2M",'TRAC', 'TRBC1', 'TRBC2', 'CD3E'
     scale_color_brewer(palette = "Set2") +
     #geom_label(aes(label = name)) +
     ggpubr::stat_cor() +
-    labs(x = "Reads covering CE junctions", y = paste0(i," gene expression"), color = "Condition") +
+    facet_wrap(~symbol) +
+    labs(#x = "", y = "",
+      #x = "Reads covering CE junctions", y = paste0(i," gene expression"), 
+      color = "Condition") +
     theme_bw() +
-    theme(legend.position = "top")
+    theme(legend.position = "top",
+          axis.title = element_blank(),
+          strip.background = element_rect(fill = "white"),
+          strip.text = element_text(face = "italic"))
 }
 
 patchwork::wrap_plots(violin_plot, nrow = 2) -> caio
